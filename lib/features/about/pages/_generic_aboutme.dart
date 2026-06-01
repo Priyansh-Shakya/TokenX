@@ -87,11 +87,7 @@ class MemberAboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0F0F1E),
-      appBar: AppBar(
-        title: Text(name),
-        backgroundColor: const Color(0xFF0F0F1E),
-        elevation: 0,
-      ),
+
       body: LayoutBuilder(
         builder: (context, constraints) {
           return constraints.maxWidth > 900
@@ -174,18 +170,6 @@ class _LeftColumn extends StatelessWidget {
         // Avatar
         _Avatar(asset: page.avatarAsset),
         const SizedBox(height: 24),
-
-        // Name
-        Text(
-          page.name,
-          textAlign: TextAlign.center,
-          style: tt.headlineSmall?.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            height: 1.2,
-          ),
-        ),
-        const SizedBox(height: 8),
 
         // Tagline
         Text(

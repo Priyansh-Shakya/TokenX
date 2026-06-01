@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_starter_template/features/about/pages/generic_aboutme.dart';
+import 'package:flutter_starter_template/features/about/pages/_generic_aboutme.dart';
 
 
 class PriyanshAboutPage extends StatelessWidget {
