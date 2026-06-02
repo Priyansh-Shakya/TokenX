@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_starter_template/core/utils/markdown_parser.dart';
 import 'package:markdown/markdown.dart' as md;
+import 'package:tokenx/core/utils/markdown_parser.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NoteViewer extends StatelessWidget {

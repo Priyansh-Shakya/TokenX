@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_starter_template/features/experiments/data/sample_experiments.dart';
-import 'package:flutter_starter_template/features/experiments/widgets/experiment_card.dart';
-import 'package:flutter_starter_template/features/home/helper_widgets/icon_widgets.dart';
+import 'package:tokenx/features/experiments/data/sample_experiments.dart';
+import 'package:tokenx/features/experiments/widgets/experiment_card.dart';
+import 'package:tokenx/features/home/helper_widgets/icon_widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 

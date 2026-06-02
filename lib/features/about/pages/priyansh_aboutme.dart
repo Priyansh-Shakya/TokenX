@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_starter_template/features/about/pages/_generic_aboutme.dart';
-
+import 'package:tokenx/features/about/pages/_generic_aboutme.dart';
 
 class PriyanshAboutPage extends StatelessWidget {
   const PriyanshAboutPage({super.key});
@@ -12,7 +11,6 @@ class PriyanshAboutPage extends StatelessWidget {
       tagline: 'AI/ML · Flutter · FastAPI',
 
       // avatarAsset: 'assets/images/priyansh.jpg', // uncomment when you have one
-
       bio:
           'B.Tech CSE (AI & ML) student interested in Full Stack Development, '
           'AI/ML, conversational AI, and backend systems.\n\n'

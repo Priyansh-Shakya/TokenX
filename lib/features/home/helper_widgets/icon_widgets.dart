@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 // Small animated pill used under the hero to visualize a token stream.
+// <bos> [embedd] [infer ] ... <eos> etc
 // Appears as a subtle purple chip that fades and rises into view.
 class _TokenPill extends StatelessWidget {
   const _TokenPill({super.key, required this.label, required this.delay});
@@ -12,9 +13,9 @@ class _TokenPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           decoration: BoxDecoration(
-            color: const Color(0xFF6C63FF).withOpacity(0.08),
+            color: const Color(0xFF6C63FF).withOpacity(0.25),
             border: Border.all(color: const Color(0xFF6C63FF).withOpacity(0.2)),
             borderRadius: BorderRadius.circular(4),
           ),
@@ -27,9 +28,12 @@ class _TokenPill extends StatelessWidget {
             ),
           ),
         )
-        .animate()
-        .fadeIn(delay: delay, duration: 600.ms)
-        .moveY(begin: 8, end: 0, duration: 600.ms, delay: delay);
+        .animate(onPlay: (controller) => controller.repeat())
+        .fadeIn(delay: delay, duration: 800.ms)
+        .then()
+        .fade(begin: 0.4, end: 1.0, duration: 1500.ms)
+        .then()
+        .fade(begin: 1.0, end: 0.4, duration: 1500.ms);
   }
 }
 
@@ -47,7 +51,7 @@ class TokenXHero extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _TokenXLogoIcon(size: isMobile ? 120 : 180),
+        _TokenXLogoIconImpl(size: isMobile ? 120 : 180), //! creates Logo
         const SizedBox(height: 30),
         _TokenXWordmark(isMobile: isMobile),
         const SizedBox(height: 36),
@@ -69,27 +73,6 @@ class TokenXHero extends StatelessWidget {
             .fadeIn(delay: 200.ms, duration: 800.ms)
             .slideY(begin: 0.3, end: 0, duration: 800.ms, delay: 200.ms),
       ],
-    );
-  }
-}
-
-// Renders the bracketed square icon mark. Uses a custom painter
-// so the mark matches the SVG look and scales crisply.
-class _TokenXLogoIcon extends StatelessWidget {
-  const _TokenXLogoIcon({super.key, required this.size});
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: size,
-      height: size,
-      child: CustomPaint(painter: _TokenXIconPainter()).animate().scale(
-        duration: 900.ms,
-        begin: const Offset(0.92, 0.92),
-        end: const Offset(1.0, 1.0),
-        curve: Curves.easeInOut,
-      ),
     );
   }
 }
@@ -189,102 +172,147 @@ class _TokenXTokenStream extends StatelessWidget {
   }
 }
 
-// Paints the bracketed square icon mark used by the hero.
-// Draws left/right brackets, a simple alphabetic `X` (two crossing
-// straight strokes), a center node and small corner accents.
-class _TokenXIconPainter extends CustomPainter {
+class _TokenXLogoIconImpl extends StatefulWidget {
+  const _TokenXLogoIconImpl({required this.size});
+
+  final double size;
+
   @override
-  void paint(Canvas canvas, Size size) {
-    final scale = size.width / 64;
-    final rect = Offset.zero & size;
-    final backgroundShader = const LinearGradient(
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      colors: [Color(0xFF1A1730), Color(0xFF0D0D18)],
-    ).createShader(rect);
+  State<_TokenXLogoIconImpl> createState() => _TokenXLogoIconImplState();
+}
 
-    final backgroundPaint = Paint()..shader = backgroundShader;
-    final borderPaint = Paint()
-      ..color = const Color(0xFF6C63FF).withOpacity(0.35)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1;
+class _TokenXLogoIconImplState extends State<_TokenXLogoIconImpl>
+    with TickerProviderStateMixin {
+  late final AnimationController _introController;
+  late final AnimationController _glowController;
 
-    final rrect = RRect.fromRectAndRadius(rect, const Radius.circular(14));
-    canvas.drawRRect(rrect, backgroundPaint);
-    canvas.drawRRect(rrect, borderPaint);
+  late final Animation<double> _scaleAnimation;
+  late final Animation<double> _fadeAnimation;
+  late final Animation<double> _glowAnimation;
 
-    final bracketShader = const LinearGradient(
-      colors: [Color(0xFF4F46E5), Color(0xFF7C73FF)],
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-    ).createShader(rect);
+  @override
+  void initState() {
+    super.initState();
 
-    final bracketPaint = Paint()
-      ..shader = bracketShader
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.5
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 1.5);
-
-    final leftBracket = Path()
-      ..moveTo(14 * scale, 20 * scale)
-      ..lineTo(8 * scale, 20 * scale)
-      ..lineTo(8 * scale, 44 * scale)
-      ..lineTo(14 * scale, 44 * scale);
-    final rightBracket = Path()
-      ..moveTo(50 * scale, 20 * scale)
-      ..lineTo(56 * scale, 20 * scale)
-      ..lineTo(56 * scale, 44 * scale)
-      ..lineTo(50 * scale, 44 * scale);
-
-    canvas.drawPath(leftBracket, bracketPaint);
-    canvas.drawPath(rightBracket, bracketPaint);
-
-    // Draw a simple, solid alphabetic X without gradient/blur to keep it
-    // crisp and typographic (no metallic/cylindrical appearance).
-    final xPaint = Paint()
-      ..color = const Color(0xFF6C63FF)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 4.0
-      ..strokeCap = StrokeCap.butt;
-
-    canvas.drawLine(
-      Offset(22 * scale, 22 * scale),
-      Offset(42 * scale, 42 * scale),
-      xPaint,
-    );
-    canvas.drawLine(
-      Offset(42 * scale, 22 * scale),
-      Offset(22 * scale, 42 * scale),
-      xPaint,
+    _introController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
     );
 
-    final centerDot = Paint()..color = const Color(0xFF6C63FF);
-    canvas.drawCircle(Offset(32 * scale, 32 * scale), 4 * scale, centerDot);
-    canvas.drawCircle(
-      Offset(32 * scale, 32 * scale),
-      2 * scale,
-      Paint()..color = const Color(0xFFC4C0FF),
+    _glowController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 4),
+    )..repeat(reverse: true);
+
+    _scaleAnimation = Tween<double>(begin: 0.9, end: 1.0).animate(
+      CurvedAnimation(parent: _introController, curve: Curves.easeOutCubic),
     );
 
-    final accentPaint = Paint()
-      ..color = const Color(0xFF4F46E5).withOpacity(0.7);
-    const dots = [
-      Offset(22, 22),
-      Offset(42, 22),
-      Offset(22, 42),
-      Offset(42, 42),
-    ];
-    for (final dot in dots) {
-      canvas.drawCircle(
-        Offset(dot.dx * scale, dot.dy * scale),
-        2 * scale,
-        accentPaint,
-      );
-    }
+    _fadeAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _introController, curve: Curves.easeOut));
+
+    _glowAnimation = Tween<double>(begin: 0.18, end: 0.30).animate(
+      CurvedAnimation(parent: _glowController, curve: Curves.easeInOut),
+    );
+
+    _introController.forward();
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  void dispose() {
+    _introController.dispose();
+    _glowController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: Listenable.merge([_introController, _glowController]),
+      builder: (context, child) {
+        return Opacity(
+          opacity: _fadeAnimation.value,
+          child: Transform.scale(scale: _scaleAnimation.value, child: child),
+        );
+      },
+      child: SizedBox(
+        width: widget.size,
+        height: widget.size,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            // Breathing glow
+            Container(
+              width: widget.size * 0.75,
+              height: widget.size * 0.75,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(
+                      0xFF6C63FF,
+                    ).withOpacity(_glowAnimation.value),
+                    blurRadius: widget.size * 0.22,
+                    spreadRadius: widget.size * 0.03,
+                  ),
+                ],
+              ),
+            ),
+
+            // Logo
+            Image.asset(
+              'web_logo.png',
+              width: widget.size,
+              height: widget.size,
+              fit: BoxFit.contain,
+              filterQuality: FilterQuality.high,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
+
+
+//! Old code of logo which has full glitch effect.
+/*
+ Uses the logo PNG and animates it. 
+ class _TokenXLogoIconImpl extends StatefulWidget { 
+  const _TokenXLogoIconImpl({required this.size});
+  final double size;
+  @override State<_TokenXLogoIconImpl> createState() => _TokenXLogoIconImplState(); 
+} 
+class _TokenXLogoIconImplState extends State<_TokenXLogoIconImpl> with TickerProviderStateMixin {
+ late final AnimationController _introController;
+  late final AnimationController _floatController;
+   late final Animation<double> _scaleAnimation;
+    late final Animation<double> _fadeAnimation; @override void initState() {
+     super.initState(); _introController = AnimationController( vsync: this,
+      duration: const Duration(milliseconds: 900), );
+      _floatController = AnimationController( vsync: this, duration: const Duration(seconds: 4),
+       )..repeat(reverse: true); _scaleAnimation = Tween<double>(begin: 0.82, end: 1.0).animate(
+        CurvedAnimation(parent: _introController, curve: Curves.easeOutCubic), ); 
+        _fadeAnimation = Tween<double>( begin: 0, end: 1, ).animate(CurvedAnimation(parent:
+         _introController, curve: Curves.easeOut)); _introController.forward();
+          } @override void dispose() { _introController.dispose();
+           _floatController.dispose(); super.dispose(); 
+           } @override Widget build(BuildContext context) {
+            return AnimatedBuilder( animation: 
+            Listenable.merge([_introController, _floatController]),
+             builder: (context, child) { 
+             final floatOffset = (0.5 - (_floatController.value - 0.5).abs()) * 10; 
+             return Opacity( opacity: _fadeAnimation.value, 
+             child: Transform.translate( offset: Offset(0, -floatOffset), 
+             child: Transform.scale(scale: _scaleAnimation.value, child: child), ), ); },
+              child: SizedBox( width: widget.size, height: widget.size,
+               child: Stack( alignment: Alignment.center, 
+               children: [ // Glow Container( width: widget.size * 0.75, height: widget.size * 0.75,
+                decoration: BoxDecoration( shape: BoxShape.circle,
+                 boxShadow: [ BoxShadow( color: const Color(0xFF6C63FF).withOpacity(0.25),
+                  blurRadius: widget.size * 0.35, spreadRadius: widget.size * 0.05, ), ], ), ),
+                   // Logo Image.asset( 'web_logo.png', width: widget.size, height: widget.size, f
+                   //it: BoxFit.contain, filterQuality: FilterQuality.high, ), ], ), ), ); } }
+*/

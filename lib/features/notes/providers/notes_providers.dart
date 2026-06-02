@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_starter_template/features/notes/models/github_content_model.dart';
-import 'package:flutter_starter_template/features/notes/services/notes_service.dart';
-import 'package:flutter_starter_template/core/utils/markdown_parser.dart';
+import 'package:tokenx/core/utils/markdown_parser.dart';
+import 'package:tokenx/features/notes/models/github_content_model.dart';
+import 'package:tokenx/features/notes/services/notes_service.dart';
 
 final notesServiceProvider = Provider<NotesService>((ref) {
   return NotesService();

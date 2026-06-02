@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_starter_template/features/notes/models/github_content_model.dart';
+import 'package:tokenx/features/notes/models/github_content_model.dart';
+
 
 class NotesService {
   static const _baseUrl = 'https://api.github.com';

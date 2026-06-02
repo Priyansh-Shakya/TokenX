@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_starter_template/features/experiments/models/experiment_model.dart';
+import 'package:tokenx/features/experiments/models/experiment_model.dart';
 
 class ExperimentCard extends StatefulWidget {
   final ExperimentModel experiment;

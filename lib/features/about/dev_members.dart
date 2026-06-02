@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_starter_template/features/about/pages/aryan_aboutme.dart';
-import 'package:flutter_starter_template/features/about/pages/priyansh_aboutme.dart';
+import 'package:tokenx/features/about/pages/aryan_aboutme.dart';
+import 'package:tokenx/features/about/pages/priyansh_aboutme.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CONTRIBUTOR GUIDE

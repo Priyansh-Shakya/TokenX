@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_starter_template/features/about/pages/_generic_aboutme.dart';
+import 'package:tokenx/features/about/pages/_generic_aboutme.dart';
 
 class AryanAboutPage extends StatelessWidget {
   const AryanAboutPage({super.key});

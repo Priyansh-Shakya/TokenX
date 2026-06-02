@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_starter_template/features/notes/models/github_content_model.dart';
+import 'package:tokenx/features/notes/models/github_content_model.dart';
 
 class NotesTreeView extends StatelessWidget {
   final List<GitHubContent> items;

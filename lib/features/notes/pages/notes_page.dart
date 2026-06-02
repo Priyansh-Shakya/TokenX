@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_starter_template/core/utils/markdown_parser.dart';
-import 'package:flutter_starter_template/features/notes/models/github_content_model.dart';
-import 'package:flutter_starter_template/features/notes/providers/notes_providers.dart';
-import 'package:flutter_starter_template/features/notes/widgets/note_viewer.dart';
-import 'package:flutter_starter_template/features/notes/widgets/notes_tree_view.dart';
+import 'package:tokenx/features/notes/models/github_content_model.dart';
+import 'package:tokenx/features/notes/providers/notes_providers.dart';
+import 'package:tokenx/features/notes/widgets/note_viewer.dart';
+import 'package:tokenx/features/notes/widgets/notes_tree_view.dart';
 
 class NotesPage extends ConsumerStatefulWidget {
   const NotesPage({super.key});
@@ -22,8 +21,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
     final notesTree = ref.watch(notesTreeProvider);
     final selectedPath = ref.watch(selectedNotePathProvider);
     final isWide = MediaQuery.sizeOf(context).width > 900;
-    final AsyncValue<MarkdownWithFrontmatter>? fileContent =
-        currentDownloadUrl != null
+    final fileContent = currentDownloadUrl != null
         ? ref.watch(markdownFileProvider(currentDownloadUrl!))
         : null;
 

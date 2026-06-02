@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import 'package:flutter_starter_template/app/my_app.dart';
+import 'package:tokenx/app/my_app.dart';
 
 class Bootstrap {
   static Future<void> initialize() async {

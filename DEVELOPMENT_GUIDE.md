@@ -74,7 +74,7 @@ The `MarkdownParser` class in `lib/core/utils/markdown_parser.dart` automaticall
 
 Usage:
 ```dart
-import 'package:flutter_starter_template/core/utils/markdown_parser.dart';
+import 'package:tokenx/core/utils/markdown_parser.dart';
 
 final parsed = MarkdownParser.parse(markdownContent);
 print(parsed.metadata['title']);

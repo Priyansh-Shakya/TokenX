@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_starter_template/features/about/dev_members.dart';
-import 'package:flutter_starter_template/features/home/pages/home_page.dart';
-import 'package:flutter_starter_template/features/notes/pages/notes_page.dart';
-import 'package:flutter_starter_template/features/notes/providers/notes_providers.dart';
+import 'package:tokenx/features/about/dev_members.dart';
+import 'package:tokenx/features/home/pages/home_page.dart';
+import 'package:tokenx/features/notes/pages/notes_page.dart';
+import 'package:tokenx/features/notes/providers/notes_providers.dart';
 
 class MainShell extends ConsumerWidget {
   const MainShell({super.key});

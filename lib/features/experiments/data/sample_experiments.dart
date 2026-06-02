@@ -1,5 +1,5 @@
 // Sample experiments data - Easy to modify and add more
-import 'package:flutter_starter_template/features/experiments/models/experiment_model.dart';
+import 'package:tokenx/features/experiments/models/experiment_model.dart';
 
 final sampleExperiments = [
   ExperimentModel(
@@ -26,7 +26,7 @@ final sampleExperiments = [
     difficulty: 'Advanced',
     concepts: 'Self-Attention, Positional Encoding, Multi-head Attention',
     githubLink:
-        'https://github.com/Priyansh-Shakya/AIML-experiments-learning/blob/main/experiments/transformer.ipynb',
+        'https://github.com/Priyansh-Shakya/AIML-experiments-learning/blob/main/experiments/Transformer.ipynb',
     notebookName: 'transformer.ipynb',
     createdAt: DateTime(2025, 9, 20),
   ),
