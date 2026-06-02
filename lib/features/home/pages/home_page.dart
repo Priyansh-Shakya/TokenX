@@ -3,7 +3,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter_template/features/experiments/data/sample_experiments.dart';
 import 'package:flutter_starter_template/features/experiments/widgets/experiment_card.dart';
+import 'package:flutter_starter_template/features/home/helper_widgets/icon_widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -36,8 +38,11 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.sizeOf(context).width < 600;
-    final screenWidth = MediaQuery.sizeOf(context).width;
+    final screenSize = MediaQuery.sizeOf(context);
+    final isMobile = screenSize.width < 600;
+    final heroHeight = isMobile
+        ? screenSize.height * 0.92
+        : screenSize.height * 0.95;
 
     return Scaffold(
       backgroundColor: const Color(0xFF0F0F1E),
@@ -48,133 +53,23 @@ class _HomePageState extends ConsumerState<HomePage> {
             // Hero Section with TokenX branding
             Container(
               width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    const Color(0xFF667EEA).withOpacity(0.1),
-                    const Color(0xFF764BA2).withOpacity(0.05),
-                  ],
-                ),
+              constraints: BoxConstraints(minHeight: heroHeight),
+              decoration: const BoxDecoration(
+                color: Color(0xFF0A0A0F),
                 border: Border(
-                  bottom: BorderSide(
-                    color: Colors.white.withOpacity(0.1),
-                    width: 1,
-                  ),
+                  bottom: BorderSide(color: Color(0x1AFFFFFF), width: 1),
                 ),
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: isMobile ? 24 : 48,
-                  vertical: isMobile ? 60 : 100,
+                  vertical: isMobile ? 48 : 72,
                 ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Logo/Icon Animation
-                    Container(
-                      width: isMobile ? 80 : 120,
-                      height: isMobile ? 80 : 120,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
-                        ),
-                        borderRadius: BorderRadius.circular(24),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF667EEA).withOpacity(0.3),
-                            blurRadius: 30,
-                            spreadRadius: 5,
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Text(
-                          'TX',
-                          style: Theme.of(context).textTheme.displayMedium
-                              ?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                      ),
-                    ).animate().scale(
-                      duration: 800.ms,
-                      begin: const Offset(0.5, 0.5),
-                      end: const Offset(1, 1),
-                    ),
-                    const SizedBox(height: 32),
-                    // Main Title
-                    Text(
-                          'TokenX',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.displayLarge
-                              ?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 2,
-                              ),
-                        )
-                        .animate(
-                          onComplete: (controller) =>
-                              controller.repeat(reverse: false),
-                        )
-                        .shimmer(
-                          duration: 3000.ms,
-                          color: const Color(0xFF667EEA).withOpacity(0.3),
-                        ),
-                    const SizedBox(height: 16),
-                    // Tagline with gradient text effect
-                    ShaderMask(
-                          shaderCallback: (bounds) => const LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              Color(0xFF667EEA),
-                              Color(0xFFF093FB),
-                              Color(0xFFF5576C),
-                            ],
-                          ).createShader(bounds),
-                          child: Text(
-                            'Solve with AI',
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.headlineSmall
-                                ?.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 1,
-                                ),
-                          ),
-                        )
-                        .animate()
-                        .fadeIn(duration: 1000.ms)
-                        .slideY(begin: 0.5, end: 0, duration: 1000.ms),
-                    const SizedBox(height: 24),
-                    // Subtitle
-                    SizedBox(
-                          width: isMobile ? screenWidth * 0.85 : 600,
-                          child: Text(
-                            'Exploring AI, Machine Learning & Research through experiments, documentation, and cutting-edge solutions',
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodyLarge
-                                ?.copyWith(
-                                  color: Colors.white.withOpacity(0.8),
-                                  height: 1.6,
-                                ),
-                          ),
-                        )
-                        .animate()
-                        .fadeIn(delay: 200.ms, duration: 800.ms)
-                        .slideY(
-                          begin: 0.3,
-                          end: 0,
-                          duration: 800.ms,
-                          delay: 200.ms,
-                        ),
-                    const SizedBox(height: 32),
-                    // CTA Buttons
+                    TokenXHero(isMobile: isMobile),
+                    const SizedBox(height: 44),
                     Wrap(
                           spacing: 16,
                           runSpacing: 16,
