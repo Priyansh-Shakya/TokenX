@@ -157,7 +157,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   // Experiments Grid
                   Column(
                     children: List.generate(
-                      sampleExperiments.length,
+                      sampleExperiments.length,  //! using sample list , generating Experiments.
                       (index) => ExperimentCard(
                         experiment: sampleExperiments[index],
                         index: index,
