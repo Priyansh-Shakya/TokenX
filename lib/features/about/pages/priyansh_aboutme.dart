@@ -6,7 +6,7 @@ class PriyanshAboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MemberAboutPage(
+    return MemberAboutPage(
       name: 'Priyansh Shakya',
       tagline: 'AI/ML · Flutter · FastAPI',
 
@@ -44,11 +44,22 @@ class PriyanshAboutPage extends StatelessWidget {
               'I build and ship small but polished Flutter apps under this studio — '
               'ranging from productivity tools to experimental AI-powered utilities. '
               'The name is a nod to keeping things compact, focused, and a little quirky.',
-          icon: Icons.gamepad_rounded,
+          icon: Image.asset(
+            'dev_members/priyansh/dr_dwarf.png',
+
+            fit: BoxFit.contain,
+          ),
           accentColor: Color(0xFF7C3AED),
+
           // Add a Play Store / GitHub link here once you have one:
-          // links: [
-          //   SocialLink(platform: SocialPlatform.github, url: 'https://github.com/DrDwarfStudios'),
+          links: [
+            (
+              label: 'Play Store',
+              url:
+                  "https://play.google.com/console/u/0/developers/5314454300312717418/app-list",
+            ),
+          ],
+          //   (label: 'GitHub', url: 'https://github.com/DrDwarfStudios'),
           // ],
         ),
       ],

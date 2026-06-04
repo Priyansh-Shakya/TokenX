@@ -3,9 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tokenx/features/experiments/data/sample_experiments.dart';
 import 'package:tokenx/features/experiments/widgets/experiment_card.dart';
-import 'package:tokenx/features/home/helper_widgets/icon_widgets.dart';
-import 'package:url_launcher/url_launcher.dart';
-
+import 'package:tokenx/features/home/helper_widgets/hero_widgets.dart';
+import 'package:tokenx/features/home/helper_widgets/home_action.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -36,220 +35,254 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final screenSize = MediaQuery.sizeOf(context);
-    final isMobile = screenSize.width < 600;
-    final heroHeight = isMobile
-        ? screenSize.height * 0.92
-        : screenSize.height * 0.95;
-
-    return Scaffold(
-      backgroundColor: const Color(0xFF0F0F1E),
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          children: [
-            // Hero Section with TokenX branding
-            Container(
-              width: double.infinity,
-              constraints: BoxConstraints(minHeight: heroHeight),
-              decoration: const BoxDecoration(
-                color: Color(0xFF0A0A0F),
-                border: Border(
-                  bottom: BorderSide(color: Color(0x1AFFFFFF), width: 1),
-                ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: isMobile ? 24 : 48,
-                  vertical: isMobile ? 48 : 72,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TokenXHero(isMobile: isMobile),
-                    const SizedBox(height: 44),
-                    Wrap(
-                          spacing: 16,
-                          runSpacing: 16,
-                          alignment: WrapAlignment.center,
-                          children: [
-                            _buildCTAButton(
-                              context,
-                              'Explore Experiments',
-                              const Color(0xFF667EEA),
-                              const Color(0xFF764BA2),
-                              _scrollToExperiments,
-                            ),
-                            _buildCTAButton(
-                              context,
-                              'View Source',
-                              const Color(0xFFF093FB),
-                              const Color(0xFFF5576C),
-                              () async {
-                                final uri = Uri.parse(
-                                  'https://github.com/Priyansh-Shakya/TokenX',
-                                );
-                                if (await canLaunchUrl(uri)) {
-                                  await launchUrl(
-                                    uri,
-                                    mode: LaunchMode.externalApplication,
-                                  );
-                                }
-                              },
-                              isOutlined: true,
-                            ),
-                          ],
-                        )
-                        .animate()
-                        .fadeIn(delay: 400.ms, duration: 800.ms)
-                        .slideY(
-                          begin: 0.3,
-                          end: 0,
-                          duration: 800.ms,
-                          delay: 400.ms,
-                        ),
-                  ],
-                ),
-              ),
-            ),
-            // Experiments Section
-            Container(
-              key: _experimentsKey,
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 24 : 48,
-                vertical: isMobile ? 60 : 80,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Section Title
-                  Text(
-                        'Latest Experiments',
-                        style: Theme.of(context).textTheme.displaySmall
-                            ?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      )
-                      .animate()
-                      .fadeIn(duration: 800.ms)
-                      .slideX(begin: -0.3, end: 0, duration: 800.ms),
-                  const SizedBox(height: 12),
-                  // Section Subtitle
-                  Text(
-                        'Dive into AI/ML research and experiments with detailed notebooks and implementations',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Colors.white.withOpacity(0.7),
-                        ),
-                      )
-                      .animate()
-                      .fadeIn(delay: 100.ms, duration: 800.ms)
-                      .slideX(
-                        begin: -0.3,
-                        end: 0,
-                        duration: 800.ms,
-                        delay: 100.ms,
-                      ),
-                  const SizedBox(height: 40),
-                  // Experiments Grid
-                  Column(
-                    children: List.generate(
-                      sampleExperiments.length,  //! using sample list , generating Experiments.
-                      (index) => ExperimentCard(
-                        experiment: sampleExperiments[index],
-                        index: index,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Footer
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Colors.white.withOpacity(0.1),
-                    width: 1,
-                  ),
-                ),
-              ),
-              padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 24 : 48,
-                vertical: 40,
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    '© 2025 TokenX. All rights reserved.',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.white.withOpacity(0.5),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Designed to showcase AI/ML research and experiments',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: Colors.white.withOpacity(0.4),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+  void _showTemporaryMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(milliseconds: 1200),
       ),
     );
   }
 
-  Widget _buildCTAButton(
-    BuildContext context,
-    String label,
-    Color startColor,
-    Color endColor,
-    VoidCallback onPressed, {
-    bool isOutlined = false,
-  }) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: onPressed,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-          decoration: BoxDecoration(
-            gradient: isOutlined
-                ? null
-                : LinearGradient(colors: [startColor, endColor]),
-            border: isOutlined ? Border.all(color: startColor, width: 2) : null,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: !isOutlined
-                ? [
-                    BoxShadow(
-                      color: startColor.withOpacity(0.3),
-                      blurRadius: 20,
-                      spreadRadius: 0,
+  @override
+  Widget build(BuildContext context) {
+    final screenSize = MediaQuery.sizeOf(context);
+    final isMobile = screenSize.width < 600;
+    final heroHeight = screenSize.height * 0.96;
+    final actionSectionHeight = screenSize.height * 0.94;
+    final cardWidth = isMobile ? double.infinity : 520.0;
+    final actionItems = [
+      HomeActionItem(
+        title: 'Explore Experiments',
+        subtitle: 'Jump into the latest AI explorations',
+        iconData: Icons.science_outlined,
+        gradientColors: const [Color(0xFF7C73FF), Color(0xFF5ED0FA)],
+        onTap: _scrollToExperiments,
+      ),
+      HomeActionItem(
+        title: 'AI Products',
+        subtitle: 'Prototype tools and product ideas',
+        iconData: Icons.smart_toy_outlined,
+        gradientColors: const [Color(0xFFFA7AEA), Color(0xFF5A86FF)],
+        onTap: () => _showTemporaryMessage('AI Products coming soon'),
+      ),
+      HomeActionItem(
+        title: 'Notes',
+        subtitle: 'Research notes, notebooks, and summaries',
+        iconData: Icons.book_outlined,
+        gradientColors: const [Color(0xFF8EF9B7), Color(0xFF6D7BFF)],
+        onTap: () => _showTemporaryMessage('Notes are coming soon'),
+      ),
+      HomeActionItem(
+        title: 'Community',
+        subtitle: 'Join discussions, updates, and ideas',
+        iconData: Icons.forum_outlined,
+        gradientColors: const [Color(0xFFFF8A6F), Color(0xFF9855FF)],
+        onTap: () =>
+            _showTemporaryMessage('Community features are coming soon'),
+      ),
+      // HomeActionItem(
+      //   title: 'Source Code',
+      //   subtitle: 'Open the GitHub repository',
+      //   iconData: Icons.code_outlined,
+      //   gradientColors: const [Color(0xFF6F86FF), Color(0xFF42D7FF)],
+      //   onTap: () => _launchUrl('https://github.com/Priyansh-Shakya/TokenX'),
+      // ),
+    ];
+
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: SingleChildScrollView(
+        controller: _scrollController,
+        child: Column(
+              children: [
+                // Full-screen hero section
+                Container(
+                  width: double.infinity,
+                  constraints: BoxConstraints(minHeight: heroHeight),
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color(0x8A12152E),
+                        Color(0x7A0B0E22),
+                      ],
                     ),
-                  ]
-                : null,
-          ),
-          child: Text(
-            label,
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.5,
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Colors.white54,
+                        width: 1,
+                      ),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isMobile ? 24 : 56,
+                      vertical: isMobile ? 44 : 48,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TokenXHero(isMobile: isMobile),
+                        const SizedBox(height: 24),
+                        Text(
+                          'A bold AI lab for new ideas, products, and experiments.',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                color: Colors.white.withOpacity(0.78),
+                                height: 1.5,
+                              ),
+                        ).animate().fadeIn(delay: 200.ms, duration: 700.ms),
+                        const SizedBox(height: 24),
+                        Text(
+                          'Explore every layer of the UX, research, and AI tooling in a connected product playground.',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: Colors.white.withOpacity(0.6),
+                                height: 1.6,
+                              ),
+                        ).animate().fadeIn(delay: 350.ms, duration: 700.ms),
+                      ],
+                    ),
+                  ),
+                ),
+                // Full-screen action cards section
+                Container(
+                  width: double.infinity,
+                  constraints: BoxConstraints(minHeight: actionSectionHeight),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isMobile ? 24 : 56,
+                    vertical: isMobile ? 36 : 52,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Start here',
+                        style: Theme.of(context).textTheme.headlineSmall
+                            ?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ).animate().fadeIn(duration: 700.ms),
+                      const SizedBox(height: 12),
+                      Text(
+                        'Large action cards make it easy to explore experiments, AI products, notes, and community.',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Colors.white.withOpacity(0.72),
+                        ),
+                      ).animate().fadeIn(delay: 120.ms, duration: 700.ms),
+                      const SizedBox(height: 32),
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 1200),
+                        child: Wrap(
+                          spacing: 20,
+                          runSpacing: 20,
+                          alignment: WrapAlignment.center,
+                          children: actionItems
+                              .map(
+                                (item) => SizedBox(
+                                  width: cardWidth,
+                                  child: HomeActionCard(item: item),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Experiments Section
+                Container(
+                  key: _experimentsKey,
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isMobile ? 24 : 56,
+                    vertical: isMobile ? 60 : 80,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                            'Latest Experiments',
+                            style: Theme.of(context).textTheme.displaySmall
+                                ?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          )
+                          .animate()
+                          .fadeIn(duration: 800.ms)
+                          .slideX(begin: -0.3, end: 0, duration: 800.ms),
+                      const SizedBox(height: 12),
+                      Text(
+                            'Dive into AI/ML research and experiments with detailed notebooks and implementations.',
+                            style: Theme.of(context).textTheme.bodyLarge
+                                ?.copyWith(
+                                  color: Colors.white.withOpacity(0.72),
+                                ),
+                          )
+                          .animate()
+                          .fadeIn(delay: 100.ms, duration: 800.ms)
+                          .slideX(
+                            begin: -0.3,
+                            end: 0,
+                            duration: 800.ms,
+                            delay: 100.ms,
+                          ),
+                      const SizedBox(height: 40),
+                      Column(
+                        children: List.generate(
+                          sampleExperiments.length,
+                          (index) => ExperimentCard(
+                            experiment: sampleExperiments[index],
+                            index: index,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Footer
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: Colors.white.withOpacity(0.1),
+                        width: 1,
+                      ),
+                    ),
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isMobile ? 24 : 56,
+                    vertical: 40,
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        '© 2025 TokenX. All rights reserved.',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.white.withOpacity(0.5),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        'Designed to showcase AI/ML research and experiments.',
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: Colors.white.withOpacity(0.4),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
-      ),
-    ).animate().scale(
-      duration: 600.ms,
-      begin: const Offset(0.8, 0.8),
-      end: const Offset(1, 1),
     );
   }
 }

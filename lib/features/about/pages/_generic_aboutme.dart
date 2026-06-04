@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -20,15 +22,27 @@ extension SocialPlatformExt on SocialPlatform {
     SocialPlatform.discord => 'Discord',
   };
 
-  IconData get icon => switch (this) {
-    SocialPlatform.linkedin => Icons.business_center_rounded,
-    SocialPlatform.github => Icons.code_rounded,
-    SocialPlatform.reddit => Icons.forum_rounded,
-    SocialPlatform.discord => Icons.headset_mic_rounded,
+  Image get icon => switch (this) {
+    SocialPlatform.linkedin => Image.asset(
+      'socials/linkedin.png',
+      fit: BoxFit.contain,
+    ),
+    SocialPlatform.github => Image.asset(
+      'socials/github.png',
+      fit: BoxFit.contain,
+    ),
+    SocialPlatform.reddit => Image.asset(
+      'socials/reddit.png',
+      fit: BoxFit.contain,
+    ),
+    SocialPlatform.discord => Image.asset(
+      'socials/discord.png',
+      fit: BoxFit.contain,
+    ),
   };
 
   Color get color => switch (this) {
-    SocialPlatform.linkedin => const Color(0xFF0A66C2),
+    SocialPlatform.linkedin => const Color.fromARGB(255, 0, 0, 0),
     SocialPlatform.github => const Color(0xFFE6EDF3),
     SocialPlatform.reddit => const Color(0xFFFF4500),
     SocialPlatform.discord => const Color(0xFF5865F2),
@@ -38,9 +52,9 @@ extension SocialPlatformExt on SocialPlatform {
 class ExtraSection {
   final String title;
   final String description;
-  final IconData icon;
+  final Image icon;
   final Color accentColor;
-  final List<SocialLink> links; // optional links specific to this section
+  final List<({String label, String url})> links; // ← changed
 
   const ExtraSection({
     required this.title,
@@ -86,7 +100,7 @@ class MemberAboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F0F1E),
+      backgroundColor: Colors.transparent,
 
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -114,7 +128,7 @@ class _WideBody extends StatelessWidget {
         Container(
           width: 320,
           height: double.infinity,
-          color: const Color(0xFF12122B),
+          color: Colors.black.withOpacity(0.30),
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
             child: _LeftColumn(page: page),
@@ -141,14 +155,17 @@ class _NarrowBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-      child: Column(
-        children: [
-          _LeftColumn(page: page),
-          const SizedBox(height: 32),
-          _RightColumn(page: page),
-        ],
+    return Container(
+      color: Colors.transparent,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+        child: Column(
+          children: [
+            _LeftColumn(page: page),
+            const SizedBox(height: 32),
+            _RightColumn(page: page),
+          ],
+        ),
       ),
     );
   }
@@ -300,7 +317,7 @@ class _SocialTile extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(p.icon, size: 18, color: p.color),
+              SizedBox(width: 18, height: 18, child: p.icon),
               const SizedBox(width: 10),
               Text(
                 p.label,
@@ -348,11 +365,7 @@ class _ExtraCard extends StatelessWidget {
                     color: section.accentColor.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Icon(
-                    section.icon,
-                    size: 20,
-                    color: section.accentColor,
-                  ),
+                  child: SizedBox(width: 45, height: 45, child: section.icon),
                 ),
                 const SizedBox(width: 12),
                 Text(
@@ -381,9 +394,11 @@ class _ExtraCard extends StatelessWidget {
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
-                children: section.links
-                    .map((l) => _ExtraLinkChip(link: l))
-                    .toList(),
+                children: [
+                  ...section.links.map(
+                    (l) => _ExtraLinkChip(label: l.label, url: l.url),
+                  ),
+                ],
               ),
             ],
           ],
@@ -394,15 +409,15 @@ class _ExtraCard extends StatelessWidget {
 }
 
 class _ExtraLinkChip extends StatelessWidget {
-  const _ExtraLinkChip({required this.link});
-  final SocialLink link;
+  const _ExtraLinkChip({required this.label, required this.url});
+  final String label;
+  final String url;
 
   @override
   Widget build(BuildContext context) {
-    final p = link.platform;
     return InkWell(
       onTap: () async {
-        final uri = Uri.parse(link.url);
+        final uri = Uri.parse(url);
         if (await canLaunchUrl(uri)) {
           await launchUrl(uri, mode: LaunchMode.externalApplication);
         }
@@ -411,20 +426,20 @@ class _ExtraLinkChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
         decoration: BoxDecoration(
-          color: p.color.withOpacity(0.12),
+          color: Colors.white.withOpacity(0.06),
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: p.color.withOpacity(0.3)),
+          border: Border.all(color: Colors.white.withOpacity(0.15)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(p.icon, size: 14, color: p.color),
+            const Icon(Icons.link_rounded, size: 14, color: Colors.white38),
             const SizedBox(width: 6),
             Text(
-              p.label,
+              label,
               style: Theme.of(
                 context,
-              ).textTheme.bodySmall?.copyWith(color: p.color),
+              ).textTheme.bodySmall?.copyWith(color: Colors.white70),
             ),
           ],
         ),
@@ -442,17 +457,32 @@ class _Card extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: const Color(0xFF12122B),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: accentColor?.withOpacity(0.25) ?? Colors.white12,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.30), // frosted
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color:
+                  accentColor?.withOpacity(0.35) ??
+                  Colors.white.withOpacity(0.08),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: 20,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: child,
         ),
       ),
-      child: child,
     );
   }
 }

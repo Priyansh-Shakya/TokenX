@@ -26,14 +26,15 @@ class _NotesPageState extends ConsumerState<NotesPage> {
         : null;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notes Explorer'),
-        backgroundColor: const Color(0xFF0F0F1E),
-        elevation: 0,
-      ),
+      backgroundColor: Colors.transparent,
+      // appBar: AppBar(
+      //   title: const Text('Notes Explorer'),
+      //   backgroundColor: const Color(0xFF0F0F1E),
+      //   elevation: 0,
+      // ),
       drawer: !isWide
           ? Drawer(
-              backgroundColor: const Color(0xFF0F0F1E),
+              backgroundColor: const Color(0xCC0F0F1E),
               child: SafeArea(
                 child: Column(
                   children: [
@@ -91,7 +92,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
               if (isWide)
                 Container(
                   width: 320,
-                  color: const Color(0xFF12122B),
+                  color: const Color(0xCC12122B),
                   child: SafeArea(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +132,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                 ),
               Expanded(
                 child: Container(
-                  color: const Color(0xFF0F0F1E),
+                  color: const Color(0xC90F0F1E),
                   child: currentDownloadUrl != null && fileContent != null
                       ? NoteViewer(
                           title: currentTitle ?? 'Note',

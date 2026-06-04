@@ -15,7 +15,7 @@ class _TokenPill extends StatelessWidget {
     return Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           decoration: BoxDecoration(
-            color: const Color(0xFF6C63FF).withOpacity(0.25),
+            color: const Color(0xFF6C63FF).withOpacity(0.40),
             border: Border.all(color: const Color(0xFF6C63FF).withOpacity(0.2)),
             borderRadius: BorderRadius.circular(4),
           ),
@@ -24,7 +24,7 @@ class _TokenPill extends StatelessWidget {
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: const Color(0xFF7B74FF),
               letterSpacing: 0.05,
-              fontSize: 10,
+              fontSize: 14,
             ),
           ),
         )
@@ -131,7 +131,7 @@ class _TokenXWordmark extends StatelessWidget {
         Text(
           'AI · ML · Community',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: const Color(0xFF5A567A),
+            color: const Color.fromARGB(255, 175, 175, 199),
             letterSpacing: 1.6,
             fontSize: isMobile ? 12 : 14,
           ),

@@ -60,23 +60,45 @@ class DevMembersPage extends StatelessWidget {
     return DefaultTabController(
       length: _members.length,
       child: Scaffold(
-        backgroundColor: const Color(0xFF0F0F1E),
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text('Team'),
-          backgroundColor: const Color(0xFF0F0F1E),
+          backgroundColor: const Color(0xAA0F0F1E).withOpacity(0.40),
           elevation: 0,
-          bottom: TabBar(
-            isScrollable: true,
-            indicatorColor: Colors.white,
-            labelColor: Colors.white,
-            unselectedLabelColor: Colors.white70,
-            tabs: _members.map((member) => Tab(text: member.name)).toList(),
+          titleSpacing: 16,
+          title: Row(
+            children: [
+              const Text(
+                'Team',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  letterSpacing: 0.4,
+                ),
+              ),
+              const SizedBox(width: 4),
+              const Text(
+                '·',
+                style: TextStyle(color: Colors.white38, fontSize: 16),
+              ),
+              const SizedBox(width: 4),
+              Expanded(
+                child: TabBar(
+                  isScrollable: true,
+                  tabAlignment: TabAlignment.start,
+                  indicatorColor: Colors.white,
+                  labelColor: Colors.white,
+                  unselectedLabelColor: Colors.white54,
+                  indicatorSize: TabBarIndicatorSize.label,
+                  dividerColor: Colors.transparent,
+                  tabs: _members.map((m) => Tab(text: m.name)).toList(),
+                ),
+              ),
+            ],
           ),
         ),
         body: TabBarView(
-          children: _members
-              .map((member) => _MemberTabPage(entry: member))
-              .toList(),
+          children: _members.map((m) => _MemberTabPage(entry: m)).toList(),
         ),
       ),
     );
@@ -91,7 +113,7 @@ class _MemberTabPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFF0F0F1E),
+      color: Colors.transparent,
       child: entry.pageBuilder(context),
     );
   }

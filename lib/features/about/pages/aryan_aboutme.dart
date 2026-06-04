@@ -6,7 +6,7 @@ class AryanAboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MemberAboutPage(
+    return  MemberAboutPage(
       name: 'Aryan Gupta',
       tagline: 'Backend · DevOps · Open Source',
 
@@ -43,7 +43,7 @@ class AryanAboutPage extends StatelessWidget {
               'collaborating with developers from different backgrounds. '
               'My interests range from backend frameworks and tooling to '
               'developer productivity and infrastructure projects.',
-          icon: Icons.code_rounded,
+          icon: Image.asset('dev_members/aryan/open_source.png', fit: BoxFit.contain,)  ,
           accentColor: Color(0xFF2563EB),
         ),
       ],

@@ -14,7 +14,7 @@ class TokenXApp extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: true,
           brightness: Brightness.dark,
-          scaffoldBackgroundColor: Color(0xFF0F0F1E),
+          scaffoldBackgroundColor: Colors.transparent,
           appBarTheme: AppBarTheme(
             backgroundColor: Color(0xFF0F0F1E),
             elevation: 0,
