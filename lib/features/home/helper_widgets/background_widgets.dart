@@ -25,7 +25,7 @@ class NetworkBackground extends StatelessWidget {
         // 3. Network PNG — transparent areas now blend into dark bg
         Opacity(
           opacity: 0.24,
-          child: Image.asset('assets/bg_network.png', fit: BoxFit.cover),
+          child: Image.asset('bg_network.png', fit: BoxFit.cover),
         ),
 
         // 4. Dark scrim so text stays readable

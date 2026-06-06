@@ -365,7 +365,9 @@ class _ExtraCard extends StatelessWidget {
                     color: section.accentColor.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: SizedBox(width: 45, height: 45, child: section.icon),
+                  child: ClipOval(
+                    child: SizedBox(width: 45, height: 45, child: section.icon),
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Text(

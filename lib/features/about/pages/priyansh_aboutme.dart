@@ -32,7 +32,7 @@ class PriyanshAboutPage extends StatelessWidget {
         ),
         SocialLink(
           platform: SocialPlatform.reddit,
-          url: 'https://reddit.com/user/Valid_Crashout_',
+          url: 'https://reddit.com/user/NextGen_Dev0',
         ),
       ],
 
