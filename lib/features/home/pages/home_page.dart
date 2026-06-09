@@ -55,21 +55,21 @@ class _HomePageState extends ConsumerState<HomePage> {
     final actionItems = [
       HomeActionItem(
         title: 'Explore Experiments',
-        subtitle: 'Jump into the latest AI explorations',
+        subtitle: 'AIML Project notebooks to study with.',
         iconData: Icons.science_outlined,
         gradientColors: const [Color(0xFF7C73FF), Color(0xFF5ED0FA)],
         onTap: _scrollToExperiments,
       ),
       HomeActionItem(
-        title: 'AI Products',
-        subtitle: 'Prototype tools and product ideas',
+        title: 'AI Tools and Models',
+        subtitle: 'AI products developed by us.',
         iconData: Icons.smart_toy_outlined,
         gradientColors: const [Color(0xFFFA7AEA), Color(0xFF5A86FF)],
         onTap: () => _showTemporaryMessage('AI Products coming soon'),
       ),
       HomeActionItem(
         title: 'Notes',
-        subtitle: 'Research notes, notebooks, and summaries',
+        subtitle: 'Learn from our community developers personal notes.',
         iconData: Icons.book_outlined,
         gradientColors: const [Color(0xFF8EF9B7), Color(0xFF6D7BFF)],
         onTap: () => ref.read(selectedTabProvider.notifier).state = 2,
@@ -162,7 +162,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ).animate().fadeIn(duration: 700.ms),
                   const SizedBox(height: 12),
                   Text(
-                    'Large action cards make it easy to explore experiments, AI products, notes, and community.',
+                    'Dive straight into the code, models, and research.',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Colors.white.withOpacity(0.72),
